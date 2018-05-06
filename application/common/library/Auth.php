@@ -10,6 +10,7 @@ use think\Db;
 use think\Hook;
 use think\Request;
 use think\Validate;
+use app\api\model\UserAttach;
 
 class Auth
 {
@@ -131,36 +132,35 @@ class Auth
      * @param array $extend    扩展参数
      * @return boolean
      */
-    public function register($username, $password, $email = '', $mobile = '', $extend = [])
+    public function register($username, $password, $mobile = '', $invitecode, $extend = [])
     {
-        // 检测用户名或邮箱、手机号是否存在
+        // 检测用户名或手机号是否存在
         if (User::getByUsername($username))
         {
             $this->setError('Username already exist');
             return FALSE;
         }
-        if ($email && User::getByEmail($email))
-        {
-            $this->setError('Email already exist');
-            return FALSE;
-        }
+
         if ($mobile && User::getByMobile($mobile))
         {
             $this->setError('Mobile already exist');
             return FALSE;
         }
-
+        
+        $self_invitecode = strtolower(Random::alnum(6));
+        if(User::where(['invitecode'=>$self_invitecode])->count() > 0)
+            $self_invitecode = strtolower(Random::alnum(6));
         $ip = request()->ip();
         $time = time();
 
         $data = [
             'username' => $username,
             'password' => $password,
-            'email'    => $email,
             'mobile'   => $mobile,
             'level'    => 1,
             'score'    => 0,
             'avatar'   => '',
+            'invitecode' => $self_invitecode,
         ];
         $params = array_merge($data, [
             'nickname'  => $username,
@@ -172,6 +172,7 @@ class Auth
             'prevtime'  => $time,
             'status'    => 'normal'
         ]);
+        
         $params['password'] = $this->getEncryptPassword($password, $params['salt']);
         $params = array_merge($params, $extend);
 
@@ -179,7 +180,7 @@ class Auth
         if (defined('UC_STATUS') && UC_STATUS)
         {
             $uc = new \addons\ucenter\library\client\Client();
-            $user_id = $uc->uc_user_register($username, $password, $email);
+            $user_id = $uc->uc_user_register($username, $password, $email="");
             // 如果小于0则说明发生错误
             if ($user_id <= 0)
             {
@@ -209,9 +210,11 @@ class Auth
             //注册成功的事件
             Hook::listen("user_register_successed", $this->_user);
 
+            //添加上级数据
+            UserAttach::addParent($user->id,$invitecode);
             return TRUE;
         }
-        catch (Exception $e)
+        catch (\Exception $e)
         {
             $this->setError($e->getMessage());
             Db::rollback();

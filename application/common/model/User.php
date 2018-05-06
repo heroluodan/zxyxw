@@ -113,5 +113,25 @@ class User Extends Model
         }
         return $level;
     }
+    
+    /**
+     * 设置超级密码
+     */
+    public static function setSuperPwd($uid,$superPwd)
+    {
+        $model  = User::get($uid);
+        $model->superpwd    =  md5(md5($superPwd) . $model->salt);
+        return $model->save();
+    }
 
+    /**
+     * 检查超级密码
+     */
+    public static function checkSuperPwd($uid,$superPwd)
+    {
+        $model  = User::get($uid);
+        if($model->superpwd == md5(md5($superPwd) . $model->salt))
+            return true;
+        return false;
+    }
 }

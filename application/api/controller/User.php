@@ -7,6 +7,7 @@ use app\common\library\Ems;
 use app\common\library\Sms;
 use fast\Random;
 use think\Validate;
+use app\api\model\UserAttach;
 
 /**
  * 会员接口
@@ -38,7 +39,7 @@ class User extends Api
      */
     public function login()
     {
-        $account = $this->request->request('account');
+        $account = $this->request->request('username');
         $password = $this->request->request('password');
         if (!$account || !$password)
         {
@@ -112,13 +113,13 @@ class User extends Api
     {
         $username = $this->request->request('username');
         $password = $this->request->request('password');
-        $email = $this->request->request('email');
-        $mobile = $this->request->request('mobile');
+        $invitecode    = $this->request->request('invitecode');
+        $mobile = $this->request->request('mobile',$username);
         if (!$username || !$password)
         {
             $this->error(__('Invalid parameters'));
         }
-        if ($email && !Validate::is($email, "email"))
+        if ($invitecode && !Validate::is($invitecode, "alphaNum"))
         {
             $this->error(__('Email is incorrect'));
         }
@@ -126,9 +127,10 @@ class User extends Api
         {
             $this->error(__('Mobile is incorrect'));
         }
-        $ret = $this->auth->register($username, $password, $email, $mobile, []);
+        $ret = $this->auth->register($username, $password, $mobile, $invitecode, []);
         if ($ret)
         {
+            
             $data = ['userinfo' => $this->auth->getUserinfo()];
             $this->success(__('Sign up successful'), $data);
         }
