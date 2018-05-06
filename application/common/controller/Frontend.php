@@ -68,7 +68,6 @@ class Frontend extends Controller
             if (!$this->auth->isLogin())
             {
                 $this->redirect('user/login');
-                
                 $this->error(__('Please login first'), 'user/login');
             }
             // 判断是否需要验证权限
