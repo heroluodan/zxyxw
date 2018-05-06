@@ -22,7 +22,7 @@ class Index extends Api
      */
     public function index()
     {
-        dump(ScoreLog::harvestSelf($this->auth->getUserinfo()['id']));exit;
+        //dump(ScoreLog::harvestSelf($this->auth->getUserinfo()['id']));exit;
 //         dump(UserAttach::getDownUser());
         $this->success('请求成功',UserAttach::getDownUser());
     }
