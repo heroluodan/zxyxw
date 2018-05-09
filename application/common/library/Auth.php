@@ -128,11 +128,12 @@ class Auth
      * @param string $username  用户名
      * @param string $password  密码
      * @param string $email     邮箱
+     * @param string $nick     昵称
      * @param string $mobile    手机号
      * @param array $extend    扩展参数
      * @return boolean
      */
-    public function register($username, $password, $mobile = '', $invitecode, $extend = [])
+    public function register($username, $password ,$nick, $mobile = '', $invitecode, $extend = [])
     {
         // 检测用户名或手机号是否存在
         if (User::getByUsername($username))
@@ -163,7 +164,7 @@ class Auth
             'invitecode' => $self_invitecode,
         ];
         $params = array_merge($data, [
-            'nickname'  => $username,
+            'nickname'  => $nick,
             'salt'      => Random::alnum(),
             'jointime'  => $time,
             'joinip'    => $ip,

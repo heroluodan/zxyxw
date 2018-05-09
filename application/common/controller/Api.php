@@ -63,6 +63,11 @@ class Api
     protected $responseType = 'json';
 
     /**
+     * 用户ID
+     * @var unknown
+     */
+    public $uid = null;
+    /**
      * 构造方法
      * @access public
      * @param Request $request Request 对象
@@ -70,7 +75,7 @@ class Api
     public function __construct(Request $request = null)
     {
         $this->request = is_null($request) ? Request::instance() : $request;
-
+        
         // 控制器初始化
         $this->_initialize();
 
@@ -84,6 +89,7 @@ class Api
                                 $this->beforeAction($method, $options);
             }
         }
+        $this->uid  = $this->auth->getUserinfo()['id'];
     }
 
     /**

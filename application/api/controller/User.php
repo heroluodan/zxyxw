@@ -28,7 +28,7 @@ class User extends Api
      */
     public function index()
     {
-        $this->success('', ['welcome' => $this->auth->nickname]);
+        $this->success('', $this->auth->getUser());
     }
 
     /**
@@ -113,6 +113,7 @@ class User extends Api
     {
         $username = $this->request->request('username');
         $password = $this->request->request('password');
+        $nick = $this->request->request('nick');
         $invitecode    = $this->request->request('invitecode');
         $mobile = $this->request->request('mobile',$username);
         if (!$username || !$password)
@@ -127,7 +128,11 @@ class User extends Api
         {
             $this->error(__('Mobile is incorrect'));
         }
-        $ret = $this->auth->register($username, $password, $mobile, $invitecode, []);
+        if ($nick && !Validate::is($nick, "chsAlphaNum"))
+        {
+            $this->error('请填写正确的昵称');
+        }
+        $ret = $this->auth->register($username, $password, $nick, $mobile, $invitecode, []);
         if ($ret)
         {
             
@@ -289,14 +294,15 @@ class User extends Api
 
     /**
      * 重置密码
-     * 
+     * 默认手机
      * @param string $mobile 手机号
      * @param string $newpassword 新密码
      * @param string $captcha 验证码
      */
     public function resetpwd()
     {
-        $type = $this->request->request("type");
+        
+        $type = $this->request->request("type",'mobile');
         $mobile = $this->request->request("mobile");
         $email = $this->request->request("email");
         $newpassword = $this->request->request("newpassword");
