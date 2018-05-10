@@ -33,10 +33,10 @@ class Index extends Api
             case 1: $msg    = '可以钓鱼';
                 break;
             case 2: 
-                $msg    = '不能收获';
-                $expire = $return['expire'];
+                $msg    = '可以收获';
                 break;
-            case 3: $msg    = '可以收获';
+            case 3: $msg    = '不能收获';
+                $expire = $return['expire'];
                 break;
             default: $msg    = '系统错误';
                 break;

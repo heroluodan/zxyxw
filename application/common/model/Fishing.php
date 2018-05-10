@@ -80,8 +80,8 @@ class Fishing extends Model
         {
             $expire = time() - $info['use_time'] - config('finish_time');
             if($expire > 0)
-                return ['code'=>2,'expire'=>$expire];
-            return ['code'=>3];
+                return ['code'=>2];
+            return ['code'=>3,'expire'=>abs($expire)];
         }
     }
     
