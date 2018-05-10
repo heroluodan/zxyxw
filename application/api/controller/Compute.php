@@ -24,18 +24,26 @@ class Compute extends Api
         $uid        = $this->auth->getUserinfo()['id'];
         
         if(!$superPwd || !$to_id || !$num)
-            return $this->error('参数错误');
+            $this->error('参数错误');
         
         $to = user::get(['mobile'=>$to_id])->id;
         if(!$to)
-            return $this->error('用户不存在');
+            $this->error('用户不存在');
         
         //检查超级密码是否正确
         if(!User::checkSuperPwd($uid,$superPwd))
-            return $this->error('超级密码错误');
-            
-        if(ScoreLog::userTrade($uid, $to, $num))
-            $this->success('转账成功');
+            $this->error('超级密码错误');
+        $return  = ScoreLog::userTrade($uid, $to, $num); 
+        switch ($return)
+        {
+            case 1: $msg    = '转账成功';
+            break;
+            case 2: $msg    = '可转鱼数不足';
+            break;
+            default: $msg    = '系统错误';
+            break;
+        }
+        $this->success($msg,[],$return);
     }
 
 }

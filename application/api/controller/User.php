@@ -7,7 +7,6 @@ use app\common\library\Ems;
 use app\common\library\Sms;
 use fast\Random;
 use think\Validate;
-use app\api\model\UserAttach;
 
 /**
  * 会员接口
@@ -128,7 +127,7 @@ class User extends Api
         {
             $this->error(__('Mobile is incorrect'));
         }
-        if ($nick && !Validate::is($nick, "chsAlphaNum"))
+        if (!$nick || !Validate::is($nick, "chsAlphaNum"))
         {
             $this->error('请填写正确的昵称');
         }
@@ -154,6 +153,10 @@ class User extends Api
         $this->success(__('Logout successful'));
     }
 
+    
+
+    
+    
     /**
      * 修改会员个人信息
      * 

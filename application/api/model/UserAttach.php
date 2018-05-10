@@ -15,12 +15,12 @@ class UserAttach extends Model
     /**
      * 缓存秒数
      */
-    protected static $expire   = 1;
+    protected static $expire   = 86400;
     
     /**
      * 根据邀请码添加上级
      */
-    public static function addParent($uid ,$invitecode="6DK4zy")
+    public static function addParent($uid ,$invitecode)
     {
         
        if(!cache('user_invite_info'.$invitecode))
@@ -55,7 +55,7 @@ class UserAttach extends Model
     {
         return 
         self::alias('a')
-        ->where(['a.uid'=>$uid])
+        ->where(['a.parent_id'=>$uid])
         ->join('user b','a.uid=b.id')
         ->field('b.nickname,b.avatar,b.id')
         ->select();

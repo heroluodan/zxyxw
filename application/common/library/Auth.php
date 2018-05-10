@@ -141,7 +141,11 @@ class Auth
             $this->setError('Username already exist');
             return FALSE;
         }
-
+        if(!$invitecode || !User::get(['invitecode'=>$invitecode]))
+        {
+            $this->setError('邀请码错误');
+            return false;
+        }
         if ($mobile && User::getByMobile($mobile))
         {
             $this->setError('Mobile already exist');
@@ -158,6 +162,7 @@ class Auth
             'username' => $username,
             'password' => $password,
             'mobile'   => $mobile,
+            'nickname' => $nick,
             'level'    => 1,
             'score'    => 0,
             'avatar'   => '',
@@ -232,7 +237,7 @@ class Auth
      */
     public function login($account, $password)
     {
-        $field = Validate::is($account, 'email') ? 'email' : (Validate::regex($account, '/^1\d{10}$/') ? 'mobile' : 'username');
+        $field =  'username';
         $user = User::get([$field => $account]);
         if (!$user)
         {

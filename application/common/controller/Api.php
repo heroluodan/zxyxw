@@ -89,7 +89,8 @@ class Api
                                 $this->beforeAction($method, $options);
             }
         }
-        $this->uid  = $this->auth->getUserinfo()['id'];
+        if($this->auth->isLogin())
+            $this->uid  = $this->auth->getUserinfo()['id'];
     }
 
     /**

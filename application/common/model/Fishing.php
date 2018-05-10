@@ -49,7 +49,7 @@ class Fishing extends Model
     {        
         $value = $value ? $value : $data['is_get'];
         $list = $this->getIsGetList();
-        return isset($list[$value]) ? $list[$value] : '';
+        return isset($list[$value]) ? '收获' : '未收获';
     }
 
     protected function setUseTimeAttr($value)

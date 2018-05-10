@@ -7,6 +7,8 @@ use fast\Random;
 use app\api\model\UserAttach;
 use app\common\model\ScoreLog;
 use app\common\model\Fishing;
+use app\common\model\User;
+use think\Request;
 
 /**
  * 首页接口
@@ -31,15 +33,15 @@ class Index extends Api
             case 1: $msg    = '可以钓鱼';
                 break;
             case 2: 
-                $msg    = '可以收获';
+                $msg    = '不能收获';
                 $expire = $return['expire'];
                 break;
-            case 3: $msg    = '不能收获';
+            case 3: $msg    = '可以收获';
                 break;
             default: $msg    = '系统错误';
                 break;
         }
-        $this->success($msg,['user'=>$userinfo,'expire'=>$expire],$return['code']);
+        $this->success($msg,['expire'=>$expire],$return['code']);
     }
 
     /**
@@ -88,5 +90,41 @@ class Index extends Api
             break;
         }
         $this->success($msg,$data,$code);
+    }
+    
+    
+    /**
+     * 是否设置超级密码
+     */
+    public function issetSuper()
+    {
+        if(User::issetSuperPwd($this->uid))
+            $this->success('超级密码已设置');
+        $this->error('超级密码未设置');
+    }
+    
+    
+    /**
+     * 设置超级密码
+     */
+    public function setSuper()
+    {
+        $superPwd   = $this->request->request('superPwd');
+        if(!$superPwd)
+            $this->error('请填写超级密码');
+        if(User::setSuperPwd($this->uid,$superPwd))
+            $this->success('设置成功');
+        $this->error('设置失败');
+    }
+    
+    /**
+     * 获取下级用户
+     */
+    public function getDownUser()
+    {
+        $data   = UserAttach::getDownUser($this->uid);
+        if($data)
+            $this->success('获取成功',$data);
+        $this->error('暂无下级');
     }
 }

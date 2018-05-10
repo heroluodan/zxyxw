@@ -129,8 +129,18 @@ class User Extends Model
      */
     public static function checkSuperPwd($uid,$superPwd)
     {
-        $model  = User::get($uid);
-        if($model->superpwd == md5(md5($superPwd) . $model->salt))
+        if(User::get($uid)->superpwd == md5(md5($superPwd) . $model->salt))
+            return true;
+        return false;
+    }
+    
+    
+    /**
+     * 是否设置超级密码
+     */
+    public static function issetSuperPwd($uid)
+    {
+        if(User::get($uid)->superpwd)
             return true;
         return false;
     }

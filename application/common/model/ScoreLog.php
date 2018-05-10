@@ -90,15 +90,15 @@ class ScoreLog Extends Model
                 User::get($to)->setInc('score',$num);
                 User::get($from)->setDec('score',$num + $poundage);
                 $model->saveAll($data);
-                return true;
+                return 1;
             } catch (\Exception $e) {
                 Db::rollback();
-                return false;
+                return 3;
             }
         }
         else 
         {
-            return false;
+            return 2;
         }
         
     }
