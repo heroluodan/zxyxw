@@ -119,10 +119,6 @@ class User extends Api
         {
             $this->error(__('Invalid parameters'));
         }
-        if ($invitecode && !Validate::is($invitecode, "alphaNum"))
-        {
-            $this->error(__('Email is incorrect'));
-        }
         if ($mobile && !Validate::regex($mobile, "^1\d{10}$"))
         {
             $this->error(__('Mobile is incorrect'));
