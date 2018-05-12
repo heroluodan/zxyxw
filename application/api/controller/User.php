@@ -123,7 +123,7 @@ class User extends Api
         {
             $this->error(__('Mobile is incorrect'));
         }
-        if (!$nick || !Validate::is($nick, "chsAlpha"))
+        if ($nick && !Validate::is($nick, "chsAlphaNum"))
         {
             $this->error('请填写正确的昵称');
         }
