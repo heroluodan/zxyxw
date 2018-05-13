@@ -113,7 +113,7 @@ class User extends Api
         $username = $this->request->request('username');
         $password = $this->request->request('password');
         $nick = $this->request->request('nick');
-        $invitecode    = $this->request->request('invitecode');
+        $invitecode    = strtolower($this->request->request('invitecode'));
         $mobile = $this->request->request('mobile',$username);
         if (!$username || !$password)
         {

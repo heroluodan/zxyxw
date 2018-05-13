@@ -16,7 +16,7 @@ use think\Request;
 class Index extends Api
 {
 
-    //protected $noNeedLogin = ['*'];
+    protected $noNeedLogin = ['*'];
     //protected $noNeedRight = ['*'];
 
     /**
@@ -25,6 +25,7 @@ class Index extends Api
      */
     public function index()
     {
+        
         $userinfo   = $this->auth->getUserInfo();
         $return   = Fishing::selectFishStatus($this->uid);
         $expire = 0;

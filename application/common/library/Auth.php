@@ -141,7 +141,7 @@ class Auth
             $this->setError('Username already exist');
             return FALSE;
         }
-        if(!$invitecode || !User::get(['invitecode'=>$invitecode]))
+        if(!User::get(['invitecode'=>$invitecode]))
         {
             $this->setError('邀请码错误');
             return false;
