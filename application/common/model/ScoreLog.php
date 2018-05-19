@@ -130,7 +130,7 @@ class ScoreLog Extends Model
             return $num;
         } catch (\Exception $e) {
             Db::rollback(); 
-            return $e->getMessage().'--'.$e->getCode();
+            return $e->getMessage().'--'.$uid;
             return false;
         }
     }
