@@ -126,7 +126,7 @@ class ScoreLog Extends Model
         try {
             Db::commit();
             User::get($uid)->setInc('score',$num);
-            $model->save($data);
+            ScoreLog::insert($data);
             return $num;
         } catch (\Exception $e) {
             Db::rollback(); 
