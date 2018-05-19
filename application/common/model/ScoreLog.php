@@ -129,9 +129,8 @@ class ScoreLog Extends Model
             $model->save($data);
             return $num;
         } catch (\Exception $e) {
-            Db::rollback();
-            
-            return $e->getMessage();
+            Db::rollback(); 
+            return $e->getMessage().'--'.$e->getCode();
             return false;
         }
     }
