@@ -91,6 +91,7 @@ class Api
         }
         if($this->auth->isLogin())
             $this->uid  = $this->auth->getUserinfo()['id'];
+        return $this->error('登录已过期','','301');
     }
 
     /**
@@ -139,7 +140,11 @@ class Api
             // 如果有传递token才验证是否登录状态
             if ($token)
             {
-                $this->auth->init($token);
+                $returnToken    = $this->auth->init($token);
+                if(!$returnToken)
+                {
+                    return $this->error('登录已过期','',301);
+                }
             }
         }
 
