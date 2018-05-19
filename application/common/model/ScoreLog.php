@@ -116,7 +116,7 @@ class ScoreLog Extends Model
         
         $num    = round($uid_score * $rate ,2);
         $data   = [
-                'user_id'   => $uid,
+                'user_id'   => intval($uid),
                 'score'     => $num,
                 'before'    => $uid_score,
                 'after'     => $uid_score + $num,
