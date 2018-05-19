@@ -119,7 +119,7 @@ class Index extends Api
     }
     
     /**
-     * 获取下级用户
+     * 获取好友的鱼数
      */
     public function getDownUser()
     {
@@ -127,5 +127,38 @@ class Index extends Api
         if($data)
             $this->success('获取成功',$data);
         $this->error('暂无下级');
+    }
+    
+    /**
+     * 收获好友
+     */
+    public function getUserNum()
+    {
+        $friend = $this->request->request('friend');
+        if(!$friend)
+        {
+            $result = ScoreLog::harvestFriend($this->uid);
+        }
+        else 
+        {
+            $result = ScoreLog::harvestFriend($this->uid,$friend);
+        }
+        $this->success($result['msg'],[],$result['code']);
+        
+    }
+    
+    
+    /**
+     * 提现
+     */
+    public function cash()
+    {
+        $num    = $this->request->request('num',0);
+        $superPwd    = $this->request->request('superPwd');
+        $alipay = $this->request->request('alipay');
+        if(!User::checkSuperPwd($this->uid,$superPwd));
+            return $this->error(__('超级密码错误'));
+        
+        
     }
 }

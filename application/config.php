@@ -292,6 +292,6 @@ return [
     
     
     //钓鱼后间隔时间可以收获
-    'finish_time' => 24*3600,
+    'finish_time' => 5,
     
 ];

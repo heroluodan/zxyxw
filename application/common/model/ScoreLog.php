@@ -136,8 +136,108 @@ class ScoreLog Extends Model
         }
     }
     
+    /**
+     * 好友处收获
+     */
+    public static function harvestFriend($uid,$friend=null)
+    {
+        $today  = strtotime(date('Y-m-d 00:00:00'));
+        $model  = new self();
+        $harvest    = [
+            'user_id'    => $uid,
+            'createtime'  => ['egt',$today],
+            'memo'  => $model->tradeType['harvest_friend'],
+        ];
+        //今天从好友出收获数量
+        $today_num  = self::where($harvest)->sum('score');
+        
+        //自己现有鱼数
+        $uid_score = User::where(['id'=>$uid])->value('score');
+        
+        $rate   = $model->getRate();
+        $yjnum    = round($uid_score * $rate ,2);//自己能收获的鱼数
+        
+        if($friend) //收获好友
+        {
+            $where  = [
+                'uid'   => $friend,
+                'get_date'      => date('Y-m-d'),
+                'is_pull' => 0
+            ];
+            $info   = Fishing::where($where)->find();
+            if(!$info) return ['code'=>0,'msg'=>'不能偷取该玩家'];
+            $num    = $info['num']/10; //可以收获的鱼数
+           
+            //还可以收获的鱼数
+            $canNum =  $yjnum - ($today_num + $num);
+            if($canNum<0)
+                $num    = $canNum + $num;
+            $data   = [
+                'user_id'   => $uid,
+                'from'      => $friend,
+                'score'     => $num,
+                'before'    => $uid_score,
+                'after'     => $uid_score + $num,
+                'memo'      => $model->tradeType['harvest_friend'],
+            ]; 
+            Db::startTrans();
+            try {
+                Db::commit();
+                User::get($uid)->setInc('score',$num);
+                $info->is_pull  = 1;
+                $info->save();
+                $model->save($data);
+                return ['code'=>1,'msg'=>'成功偷取'.$num.'条'];
+            } catch (\Exception $e) {
+                Db::rollback();
+                return ['code'=>2,'msg'=>'系统错误'];
+                return $e->getMessage();
+            }
+           
+        }
+        else //一键收获
+        {
+            $where  = [
+                'get_date'      => date('Y-m-d'),
+                'is_pull' => 0
+            ];
+            //总共能收获的鱼数
+            $sumNum   = Fishing::where($where)->sum('num');
+            if($sumNum <= 0)
+                return ['code'=>3,'msg'=>'没有用户可偷取'];
+            $num     = $yjnum - $today_num;
+            if($sumNum < $num)
+                $num    = $sumNum;
+            if($num <= 0)
+                return ['code'=>4,'msg'=>'今天已经全部偷取'];
+            Db::startTrans();
+            try {
+                Db::commit();
+                User::get($uid)->setInc('score',$num);
+                $fishModel  = new Fishing();
+                $fishModel->where($where)->data(['is_pull'=>1])->update();
+                $data   = [
+                    'user_id'   => $uid,
+                    'from'      => 0,
+                    'score'     => $num,
+                    'before'    => $uid_score,
+                    'after'     => $uid_score + $num,
+                    'memo'      => $model->tradeType['harvest_friend'],
+                ];
+                $model->save($data);
+                return ['code'=>1,'msg'=>'成功偷取'.$num.'条'];
+            } catch (\Exception $e) {
+                Db::rollback();
+                return ['code'=>2,'msg'=>'系统错误'];
+                return $e->getMessage();
+            }
+        }
+        
+    }
     
     
-    
+    /**
+     * 用户转账
+     */
     
 }

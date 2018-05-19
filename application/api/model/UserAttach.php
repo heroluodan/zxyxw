@@ -53,11 +53,15 @@ class UserAttach extends Model
      */
     public static function getDownUser($uid=25)
     {
+        $today  = date('Y-m-d');
+        $where  =[
+            'a.parent_id'   =>$uid,
+        ];
         return 
         self::alias('a')
-        ->where(['a.parent_id'=>$uid])
-        ->join('user b','a.uid=b.id')
-        ->field('b.nickname,b.avatar,b.id')
+        ->where($where)
+        ->join('user b','a.uid=b.id','left')
+        ->field("b.nickname,b.avatar,b.id,format((select num from fs_fishing where uid = b.id and get_date = '{$today}' and is_pull=0 limit 1)/10,2) as num")
         ->select();
     }
 }
