@@ -165,6 +165,7 @@ class Index extends Api
             $data['useScore'] = 0;   
         }
         else{
+            $data['score']   = 300;
             $data['useScore']   = round($data['score'] - 300,2);
         }
         $this->success(__('获取成功'),$data);
