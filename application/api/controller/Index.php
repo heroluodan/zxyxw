@@ -9,6 +9,7 @@ use app\common\model\ScoreLog;
 use app\common\model\Fishing;
 use app\common\model\User;
 use think\Request;
+use app\admin\model\UserCash;
 
 /**
  * 首页接口
@@ -27,7 +28,10 @@ class Index extends Api
     {
         
         $userinfo   = $this->auth->getUserInfo();
+        if($userinfo['score']<300)
+            return $this->success("请写联系管理开通渔场",[],4);
         $return   = Fishing::selectFishStatus($this->uid);
+        
         $expire = 0;
         switch ($return['code'])
         {
@@ -42,7 +46,7 @@ class Index extends Api
             default: $msg    = '系统错误';
                 break;
         }
-        $this->success($msg,['expire'=>$expire],$return['code']);
+        $this->success($msg,['expire'=>$expire,'userinfo'=>$this->auth->getUserinfo()],$return['code']);
     }
 
     /**
@@ -149,6 +153,16 @@ class Index extends Api
     
     
     /**
+     * 用户实时信息
+     */
+    public function getUserInfo()
+    {
+        $data   = $this->auth->getUserinfo();
+        $data['useScore']   = $data['score']-300;
+        $this->success(__('获取成功'),$data);
+    }
+    
+    /**
      * 提现
      */
     public function cash()
@@ -158,7 +172,20 @@ class Index extends Api
         $alipay = $this->request->request('alipay');
         if(!User::checkSuperPwd($this->uid,$superPwd));
             return $this->error(__('超级密码错误'));
-        
-        
+        $return     = ScoreLog::cash($this->uid, $num);
+        if($return)
+        {
+            $data   = [
+                'uid'   => $this->uid,
+                'num'   =>  $num,
+                'createtime' => time(),
+                'updatetime' => time(),
+                'createdate' => date('Y-m-d H:i:s'),
+                'updatedate' => date('Y-m-d H:i:s'),
+            ];
+            if(UserCash::insert($data))
+                return $this->success(__('申请成功'));
+            return $this->success(__('申请失败'));
+        }
     }
 }

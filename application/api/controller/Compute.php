@@ -19,14 +19,16 @@ class Compute extends Api
     public function tradeToScore()
     {
         $superPwd   = $this->request->request('superPwd','');
-        $to_id      = $this->request->request('to_id','');
+        $to_id      = $this->request->request('toId','');
         $num        = intval($this->request->request('num',''));
         $uid        = $this->auth->getUserinfo()['id'];
         
         if(!$superPwd || !$to_id || !$num)
             $this->error('参数错误');
-        
-        $to = user::get(['mobile'=>$to_id])->id;
+        $model  = user::get(['mobile'=>$to_id]);
+        if(!$model)
+            return $this->error(__('用户不存在'));
+        $to = $model->id;
         if(!$to)
             $this->error('用户不存在');
         

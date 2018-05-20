@@ -1,0 +1,52 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label for="c-uid" class="control-label col-xs-12 col-sm-2">{:__('Uid')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-uid" class="form-control" name="row[uid]" type="number" value="{$row.uid}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-num" class="control-label col-xs-12 col-sm-2">{:__('Num')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-num" class="form-control" name="row[num]" type="number" value="{$row.num}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-alipay" class="control-label col-xs-12 col-sm-2">{:__('Alipay')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-alipay" class="form-control" name="row[alipay]" type="text" value="{$row.alipay}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-status" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-status" class="form-control" name="row[status]" type="number" value="{$row.status}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-createdate" class="control-label col-xs-12 col-sm-2">{:__('Createdate')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-createdate" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[createdate]" type="text" value="{$row.createdate}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-updatedate" class="control-label col-xs-12 col-sm-2">{:__('Updatedate')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-updatedate" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[updatedate]" type="text" value="{$row.updatedate}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-remark" class="control-label col-xs-12 col-sm-2">{:__('Remark')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-remark" class="form-control" name="row[remark]" type="text" value="{$row.remark}">
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

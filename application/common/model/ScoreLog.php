@@ -24,10 +24,11 @@ class ScoreLog Extends Model
     protected $proportion = null;
     
     protected $tradeType    = [
-        'trade_push'    => '交易转账转出',
-        'trade_get'     => '交易转账获得',
-        'harvest_self'       => '鱼塘收获所得',
-        'harvest_friend'       => '好友处收获',
+        'trade_push'        => '交易转账转出',
+        'trade_get'         => '交易转账获得',
+        'harvest_self'      => '鱼塘收获所得',
+        'harvest_friend'    => '好友处收获',
+        'cash'              => '提现'
     ];
     // 追加属性
     protected $append = [
@@ -239,4 +240,32 @@ class ScoreLog Extends Model
      * 用户转账
      */
     
+
+    /**
+     * 提现
+     */
+    public static function cash($uid,$num)
+    {
+        //现有鱼数
+        $uid_score = User::where(['id'=>$uid])->value('score');
+        $model  = new self();
+        $num = $num+($num/10);
+        $data   = [
+            'user_id'   => intval($uid),
+            'score'     => -$num,
+            'before'    => $uid_score,
+            'after'     => $uid_score - $num,
+            'memo'      => $model->tradeType['cash'],
+        ];
+        Db::startTrans();
+        try {
+            Db::commit();
+            User::get($uid)->setDec('score',$num);
+            ScoreLog::insert($data);
+            return $num;
+        } catch (\Exception $e) {
+            Db::rollback();
+            return false;
+        }
+    }
 }
