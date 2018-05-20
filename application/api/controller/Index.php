@@ -188,6 +188,7 @@ class Index extends Api
             $data   = [
                 'uid'   => $this->uid,
                 'num'   =>  $num,
+                'alipay'    => $alipay,
                 'createtime' => time(),
                 'updatetime' => time(),
                 'createdate' => date('Y-m-d H:i:s'),
