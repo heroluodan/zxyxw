@@ -158,7 +158,15 @@ class Index extends Api
     public function getUserInfo()
     {
         $data   = $this->auth->getUserinfo();
-        $data['useScore']   = $data['score']-300;
+        
+        if($data['score']<300)
+        {
+            $data['score'] = 0;
+            $data['useScore'] = 0;
+        }
+        else{
+            $data['useScore']   = $data['score']-300;
+        }
         $this->success(__('获取成功'),$data);
     }
     
