@@ -162,10 +162,10 @@ class Index extends Api
         if($data['score']<300)
         {
             $data['score'] = 0;
-            $data['useScore'] = 0;
+            $data['useScore'] = 0;   
         }
         else{
-            $data['useScore']   = $data['score']-300;
+            $data['useScore']   = round($data['score'] - 300,2);
         }
         $this->success(__('获取成功'),$data);
     }

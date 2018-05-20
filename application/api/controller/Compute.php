@@ -18,19 +18,19 @@ class Compute extends Api
      */
     public function tradeToScore()
     {
+        $userInfo   = $this->auth->getUserinfo();
         $superPwd   = $this->request->request('superPwd','');
         $to_id      = $this->request->request('toId','');
         $num        = intval($this->request->request('num',''));
-        $uid        = $this->auth->getUserinfo()['id'];
-        
+        $uid        = $userInfo['id'];
+        if($userInfo['score'] - 300<$num)
+            return $this->error('转账数目不足');
         if(!$superPwd || !$to_id || !$num)
-            $this->error('参数错误');
+            return $this->error('参数错误');
         $model  = user::get(['mobile'=>$to_id]);
         if(!$model)
             return $this->error(__('用户不存在'));
         $to = $model->id;
-        if(!$to)
-            $this->error('用户不存在');
         
         //检查超级密码是否正确
         if(!User::checkSuperPwd($uid,$superPwd))
