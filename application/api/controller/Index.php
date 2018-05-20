@@ -180,7 +180,7 @@ class Index extends Api
         $num    = $this->request->request('num',0);
         $superPwd    = $this->request->request('superPwd');
         $alipay = $this->request->request('alipay');
-        if(!User::checkSuperPwd($this->uid,$superPwd));
+        if(!User::checkSuperPwd($this->uid,$superPwd))
             return $this->error(__('超级密码错误'));
         $return     = ScoreLog::cash($this->uid, $num);
         if($return)
@@ -194,7 +194,12 @@ class Index extends Api
                 'updatedate' => date('Y-m-d H:i:s'),
             ];
             if(UserCash::insert($data))
-                return $this->success(__('申请成功'));
+            {
+                $useScore   = $this->auth->getUserinfo()['score']-300 - ($num+($num/10));
+                return $this->success(__('申请成功'),['num'=>$useScore]);
+            }
+                
+                
             return $this->success(__('申请失败'));
         }
     }
