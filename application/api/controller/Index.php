@@ -214,8 +214,8 @@ class Index extends Api
                 'score'     => ['gt',0],
             ];
             $data['data'][]   = ScoreLog::where($where)->sum('score');
-            
         }
+        $data['rate']   = ['basic'=>(config('rate')*100).'%','new'=>(config('rate')*100).'%'];
         $this->success(__('获取成功'),$data);
         
     }
