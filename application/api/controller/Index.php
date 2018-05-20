@@ -196,4 +196,27 @@ class Index extends Api
             return $this->success(__('申请失败'));
         }
     }
+    
+    
+    /**
+     * 获取利率
+     */
+    public function getIncome()
+    {
+        for($i=3;$i>=0;$i--)
+        {
+            $begin =   strtotime(date('Y-m-d 00:00:00',strtotime('-'.$i.' day')));
+            $end =   strtotime(date('Y-m-d 23:59:59',strtotime('-'.$i.' day')));
+            $data['date'][] = date('m-d',strtotime('-'.$i.' day'));
+            $where  = [
+                'user_id'   => $this->uid,
+                'createtime'=> ['between',[$begin,$end]],
+                'score'     => ['gt',0],
+            ];
+            $data['data'][]   = ScoreLog::where($where)->sum('score');
+            
+        }
+        $this->success(__('获取成功'),$data);
+        
+    }
 }
