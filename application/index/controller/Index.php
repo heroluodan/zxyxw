@@ -19,7 +19,7 @@ class Index extends Frontend
 
     public function index()
     {
-        $this->success('页面不存在');exit;
+        exit('页面不存在');
         $this->redirect('User/index');
         return $this->view->fetch();
     }
