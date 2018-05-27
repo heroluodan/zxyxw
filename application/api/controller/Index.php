@@ -115,8 +115,23 @@ class Index extends Api
     public function setSuper()
     {
         $superPwd   = $this->request->request('superPwd');
+        $verisy     = $this->request->request('verify');
         if(!$superPwd)
             $this->error('请填写超级密码');
+        if(User::setSuperPwd($this->uid,$superPwd))
+            $this->success('设置成功');
+        $this->error('设置失败');
+    }
+    
+    /**
+     * 修改登录密码
+     */
+    public function setPass()
+    {
+        $superPwd   = $this->request->request('passwd');
+        $verisy     = $this->request->request('verify');
+        if(!$superPwd)
+            $this->error('请填写密码');
         if(User::setSuperPwd($this->uid,$superPwd))
             $this->success('设置成功');
         $this->error('设置失败');

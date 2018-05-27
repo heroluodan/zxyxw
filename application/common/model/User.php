@@ -145,4 +145,14 @@ class User Extends Model
             return true;
         return false;
     }
+    
+    /**
+     * 修改密码
+     */
+    public static function setPasswd($uid,$passwd)
+    {
+        $model  = User::get($uid);
+        $model->password    =  md5(md5($passwd) . $model->salt);
+        return $model->save();
+    }
 }
