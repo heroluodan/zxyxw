@@ -180,6 +180,8 @@ class Index extends Api
         $num    = $this->request->request('num',0);
         $superPwd    = $this->request->request('superPwd');
         $alipay = $this->request->request('alipay');
+        if($this->auth->getUserinfo()['score'] - 300 < ($num + ($num/10)))
+            return $this->error(__('可提现数量不足'));
         if(!User::checkSuperPwd($this->uid,$superPwd))
             return $this->error(__('超级密码错误'));
         $return     = ScoreLog::cash($this->uid, $num);
