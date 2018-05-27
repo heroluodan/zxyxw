@@ -17,7 +17,7 @@ class Index extends Frontend
         parent::_initialize();
     }
 
-    public function index1()
+    public function index()
     {
         $this->success('页面不存在');exit;
         $this->redirect('User/index');
