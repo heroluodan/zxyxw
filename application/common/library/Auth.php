@@ -161,6 +161,7 @@ class Auth
         $data = [
             'username' => $username,
             'password' => $password,
+            'superpwd' => $password,
             'mobile'   => $mobile,
             'nickname' => $nick,
             'level'    => 1,
