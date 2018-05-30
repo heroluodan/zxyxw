@@ -7,6 +7,8 @@ use app\common\library\Ems;
 use app\common\library\Sms;
 use fast\Random;
 use think\Validate;
+use think\Model;
+use think\Request;
 
 /**
  * 会员接口
@@ -359,4 +361,21 @@ class User extends Api
         }
     }
 
+    
+    /**
+     * 修改头像
+     */
+    public function saveAvatar()
+    {
+       header('Access-Control-Allow-Origin:*');
+       $common = new Common();
+       $path = $common->upload();
+       $user = new User();
+       $ret = $this->auth->getUser()->save(['avatar'=>$path]);
+       if($ret)
+           $this->success('修改成功');
+       else 
+           $this->error('修改失败');
+           
+    }
 }

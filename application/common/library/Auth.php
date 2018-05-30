@@ -300,7 +300,7 @@ class Auth
         //判断旧密码是否正确
         if ($this->_user->password == $this->getEncryptPassword($oldpassword, $this->_user->salt) || $ignoreoldpassword)
         {
-            $salt = Random::alnum();
+            $salt = $this->_user->salt;
             $newpassword = $this->getEncryptPassword($newpassword, $salt);
             $this->_user->save(['password' => $newpassword, 'salt' => $salt]);
 

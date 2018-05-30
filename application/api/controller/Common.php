@@ -133,6 +133,7 @@ class Common extends Api
             $attachment->data(array_filter($params));
             $attachment->save();
             \think\Hook::listen("upload_after", $attachment);
+            return $uploadDir . $splInfo->getSaveName();
             $this->success(__('Upload successful'), [
                 'url' => $uploadDir . $splInfo->getSaveName()
             ]);

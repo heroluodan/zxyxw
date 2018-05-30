@@ -10,6 +10,8 @@ use app\common\model\Fishing;
 use app\common\model\User;
 use think\Request;
 use app\admin\model\UserCash;
+use think\Hook;
+use think\Model;
 
 /**
  * 首页接口
@@ -29,7 +31,7 @@ class Index extends Api
         
         $userinfo   = $this->auth->getUserInfo();
         if($userinfo['score']<300)
-            return $this->success("请写联系管理开通渔场",[],4);
+            return $this->success("请写联系管理开通渔场",['userinfo'=>$this->auth->getUserinfo()],4);
         $return   = Fishing::selectFishStatus($this->uid);
         
         $expire = 0;
@@ -244,4 +246,70 @@ class Index extends Api
         $this->success(__('获取成功'),$data);
         
     }
+    
+    
+    /**
+     * 排行榜
+     */
+    public function getSort(){
+        $field  = "a.id,a.nickname,a.avatar,a.score,
+            (select count(*) from fs_user_attach where parent_id=a.id) as downuser,
+            ifnull((select sum(num) from fs_user_cash where uid=a.id),0) as cash
+            ";
+       $data = User::alias('a')
+       ->field($field)
+
+//        ->join('fs_user_attach b','a.id=b.parent_id','left')
+       ->order('score desc')
+       
+       ->limit(20)
+       ->select();
+       $this->success('获取成功',$data);
+    }
+    
+    /**
+     * 修改登录密码
+     */
+    public function savePass()
+    {
+        $oldpass    = $this->request->request('oldpass');
+        $newpass    = $this->request->request('newpass');
+        $ret = $this->auth->changepwd($newpass,$oldpass);
+        if ($ret)
+        {
+            $this->success(__('修改密码成功'));
+        }
+        else
+        {
+            $this->error($this->auth->getError());
+        }
+    }
+    
+    /**
+     * 修改超级密码
+     */
+    public function saveSuperPass()
+    {
+        $oldpass    = $this->request->request('oldpass');
+        $newpass    = $this->request->request('newpass');
+        //判断旧密码是否正确
+        $salt =  $this->auth->getUser()->salt;
+        if ($this->auth->getUser()->superpwd == $this->auth->getEncryptPassword($oldpass,$salt))
+        {
+            $user = new User();
+            $newpassword = $this->auth->getEncryptPassword($newpass, $salt);
+            $user->save(['superpwd' => $newpassword]);
+        
+            $this->success('修改成功');
+            return true;
+        }
+        else
+        {
+            $this->error('原密码错误');
+            return false;
+        }
+        
+       
+    }
+    
 }
