@@ -152,7 +152,7 @@ class Auth
             return FALSE;
         }
         
-        $self_invitecode = strtolower(Random::alnum(6));
+        $self_invitecode = strtolower(Random::alpha(2).Random::numeric());
         if(User::where(['invitecode'=>$self_invitecode])->count() > 0)
             $self_invitecode = strtolower(Random::alnum(6));
         $ip = request()->ip();
