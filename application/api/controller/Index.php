@@ -31,7 +31,7 @@ class Index extends Api
         
         $userinfo   = $this->auth->getUserInfo();
         if($userinfo['score']<300)
-            return $this->success("请写联系管理开通渔场",['userinfo'=>$this->auth->getUserinfo()],4);
+            return $this->success("请联系管理开通渔场",['userinfo'=>$this->auth->getUserinfo()],4);
         $return   = Fishing::selectFishStatus($this->uid);
         
         $expire = 0;
