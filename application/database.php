@@ -26,7 +26,7 @@ return [
     // 端口
     'hostport'        => Env::get('database.hostport'),
     // 连接dsn
-    'dsn'             => Env::get('database.type').":host=".Env::get('database.hostname').";dbname=".Env::get('database.database'),
+   // 'dsn'             => Env::get('database.type').":host=".Env::get('database.hostname').";dbname=".Env::get('database.database'),
     // 数据库连接参数
     'params'          => [],
     // 数据库编码默认采用utf8

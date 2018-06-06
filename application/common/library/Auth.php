@@ -39,7 +39,7 @@ class Auth
     }
 
     /**
-     * 
+     *
      * @param array $options 参数
      * @return Auth
      */
@@ -64,7 +64,7 @@ class Auth
 
     /**
      * 兼容调用user模型的属性
-     * 
+     *
      * @param string $name
      * @return mixed
      */
@@ -151,7 +151,7 @@ class Auth
             $this->setError('Mobile already exist');
             return FALSE;
         }
-        
+
         $self_invitecode = strtolower(Random::alpha(2).Random::numeric());
         if(User::where(['invitecode'=>$self_invitecode])->count() > 0)
             $self_invitecode = strtolower(Random::alnum(6));
@@ -167,7 +167,7 @@ class Auth
             'level'    => 1,
             'score'    => 0,
             'avatar'   => '',
-            'invitecode' => $self_invitecode,
+            'invitecode' => $username,
         ];
         $params = array_merge($data, [
             'nickname'  => $nick,
@@ -179,8 +179,9 @@ class Auth
             'prevtime'  => $time,
             'status'    => 'normal'
         ]);
-        
+
         $params['password'] = $this->getEncryptPassword($password, $params['salt']);
+        $params['superpwd'] = $this->getEncryptPassword($password, $params['salt']);
         $params = array_merge($params, $extend);
 
         ////////////////同步到Ucenter////////////////
@@ -265,7 +266,7 @@ class Auth
 
     /**
      * 注销
-     * 
+     *
      * @return boolean
      */
     public function logout()
