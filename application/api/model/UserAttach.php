@@ -61,7 +61,7 @@ class UserAttach extends Model
         self::alias('a')
         ->where($where)
         ->join('user b','a.uid=b.id','left')
-        ->field("b.nickname,b.avatar,b.id,IFNULL(format((select num from fs_fishing where uid = b.id and get_date = '{$today}' and is_pull=0 limit 1)/10,2),0) as num")
+        ->field("b.nickname,b.avatar,b.id,IFNULL(format((select num from fa_fishing where uid = b.id and get_date = '{$today}' and is_pull=0 limit 1)/10,2),0) as num")
         ->select();
     }
 }

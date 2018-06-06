@@ -253,8 +253,8 @@ class Index extends Api
      */
     public function getSort(){
         $field  = "a.id,a.nickname,a.avatar,a.score,
-            (select count(*) from fs_user_attach where parent_id=a.id) as downuser,
-            ifnull((select sum(num) from fs_user_cash where uid=a.id),0) as cash
+            (select count(*) from fa_user_attach where parent_id=a.id) as downuser,
+            ifnull((select sum(num) from fa_user_cash where uid=a.id),0) as cash
             ";
        $data = User::alias('a')
        ->field($field)
