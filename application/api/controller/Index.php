@@ -318,7 +318,7 @@ class Index extends Api
      */
     public function getnoticetitle()
     {
-        $list = Notice::where(['status'=>1])->field('id,title')->select();
+        $list = Notice::where(['status'=>1])->field('id,title')->order('id desc')->limit(10)->select();
         $this->success('获取成功',$list); 
     }
     
@@ -327,7 +327,7 @@ class Index extends Api
      */
     public function getnoticecontent()
     {
-        $list = Notice::where(['status'=>1])->field('id,title,content,time')->select();
+        $list = Notice::where(['status'=>1])->field('id,title,content,time')->order('id desc')->limit(10)->select();
         $this->success('获取成功',$list);
     }
     
