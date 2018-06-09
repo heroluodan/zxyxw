@@ -327,7 +327,7 @@ class Index extends Api
      */
     public function getnoticecontent()
     {
-        $list = Notice::where(['status'=>1])->field('id,title,content')->select();
+        $list = Notice::where(['status'=>1])->field('id,title,content,time')->select();
         $this->success('获取成功',$list);
     }
     
