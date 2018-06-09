@@ -9,20 +9,19 @@ use app\common\controller\Backend;
  *
  * @icon fa fa-circle-o
  */
-class Fishing extends Backend
+class Notice extends Backend
 {
     
     /**
-     * Fishing模型对象
+     * Notice模型对象
      */
     protected $model = null;
 
     public function _initialize()
     {
         parent::_initialize();
-        $this->model = model('Fishing');
-        $this->view->assign("isGetList", $this->model->getIsGetList());
-        $this->view->assign("isPullList", $this->model->getIsPullList());
+        $this->model = model('Notice');
+
     }
     
     /**

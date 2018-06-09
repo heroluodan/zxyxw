@@ -12,6 +12,7 @@ use think\Request;
 use app\admin\model\UserCash;
 use think\Hook;
 use think\Model;
+use app\admin\model\Notice;
 
 /**
  * 首页接口
@@ -296,9 +297,9 @@ class Index extends Api
         $salt =  $this->auth->getUser()->salt;
         if ($this->auth->getUser()->superpwd == $this->auth->getEncryptPassword($oldpass,$salt))
         {
-            $user = new User();
+           
             $newpassword = $this->auth->getEncryptPassword($newpass, $salt);
-            $user->save(['superpwd' => $newpassword]);
+            $this->auth->getUser()->save(['superpwd' => $newpassword]);
         
             $this->success('修改成功');
             return true;
@@ -310,6 +311,24 @@ class Index extends Api
         }
         
        
+    }
+    
+    /**
+     * 获取公告
+     */
+    public function getnoticetitle()
+    {
+        $list = Notice::where(['status'=>1])->field('id,title')->select();
+        $this->success('获取成功',$list); 
+    }
+    
+    /**
+     * 获取公告内容
+     */
+    public function getnoticecontent()
+    {
+        $list = Notice::where(['status'=>1])->field('id,title,content')->select();
+        $this->success('获取成功',$list);
     }
     
 }

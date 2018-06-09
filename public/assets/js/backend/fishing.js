@@ -33,6 +33,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'get_date', title: __('Get_date'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'is_get', title: __('Is_get'), visible:false, searchList: {"4":__('Is_get 4')}},
                         {field: 'is_get_text', title: __('Is_get'), operate:false},
+                        {field: 'is_pull', title: __('Is_pull'), visible:false, searchList: {"4":__('Is_pull 4')}},
+                        {field: 'is_pull_text', title: __('Is_pull'), operate:false},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
