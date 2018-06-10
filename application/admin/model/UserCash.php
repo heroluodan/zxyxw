@@ -18,14 +18,23 @@ class UserCash extends Model
     
     // 追加属性
     protected $append = [
-
+        'status_text'
     ];
     
 
     
+    public function getStatusList()
+    {
+        return ['4' => __('Status 4')];
+    }     
 
 
-
+    public function getStatusTextAttr($value, $data)
+    {        
+        $value = $value ? $value : $data['status'];
+        $list = $this->getStatusList();
+        return isset($list[$value]) ? $list[$value] : '';
+    }
 
 
 

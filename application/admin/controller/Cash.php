@@ -21,7 +21,7 @@ class Cash extends Backend
     {
         parent::_initialize();
         $this->model = model('UserCash');
-
+        $this->view->assign("statusList", $this->model->getStatusList());
     }
     
     /**

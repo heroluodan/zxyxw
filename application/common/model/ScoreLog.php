@@ -24,9 +24,9 @@ class ScoreLog Extends Model
     protected $proportion = null;
     
     protected $tradeType    = [
-        'trade_push'        => '交易转账转出',
-        'trade_get'         => '交易转账获得',
-        'harvest_self'      => '鱼塘收获所得',
+        'trade_push'        => '交易转出',
+        'trade_get'         => '交易获得',
+        'harvest_self'      => '鱼塘收获',
         'harvest_friend'    => '好友处收获',
         'cash'              => '提现'
     ];
@@ -90,11 +90,12 @@ class ScoreLog Extends Model
                 Db::commit();
                 User::get($to)->setInc('score',$num);
                 User::get($from)->setDec('score',$num + $poundage);
-                $model->saveAll($data);
+                $model->saveAll($data);               
                 return 1;
             } catch (\Exception $e) {
+                file_put_contents('./scorelog.txt', $e->getMessage());
                 Db::rollback();
-                return 3;
+                return $e->getMessage();
             }
         }
         else 

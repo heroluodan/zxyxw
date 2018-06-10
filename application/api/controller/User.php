@@ -9,6 +9,7 @@ use fast\Random;
 use think\Validate;
 use think\Model;
 use think\Request;
+use app\common\model\ScoreLog;
 
 /**
  * 会员接口
@@ -115,6 +116,7 @@ class User extends Api
         $username = $this->request->request('username');
         $password = $this->request->request('password');
         $nick = $this->request->request('nick');
+        $code = $this->request->request('phonecode');
         $invitecode    = strtolower($this->request->request('invitecode'));
         $mobile = $this->request->request('mobile',$username);
         if (!$username || !$password)
@@ -128,6 +130,11 @@ class User extends Api
         if ($nick && !Validate::is($nick, "chsAlphaNum"))
         {
             $this->error('请填写正确的昵称');
+        }
+        $ret = Sms::check($mobile, $code, 'register');
+        if (!$ret)
+        {
+            $this->error(__('验证码不正确'));
         }
         $ret = $this->auth->register($username, $password, $nick, $mobile, $invitecode, []);
         if ($ret)
@@ -377,5 +384,26 @@ class User extends Api
        else 
            $this->error('修改失败');
            
+    }
+    
+    
+    /**
+     * 查询交易记录
+     */
+    public function tradelist()
+    {
+        $data = ScoreLog::alias('a')
+        ->join('fa_user b','a.from=b.id','left')
+        ->join('fa_user c','a.to=c.id','left')
+        ->where(['a.user_id'=>$this->uid])
+        ->limit(50)
+        ->order('a.id DESC')
+        ->field('a.from,a.to,a.createtime,a.memo,a.score,b.nickname as bnick,c.nickname as cnick')
+        ->select();
+        foreach ($data as $k => $v)
+        {
+           $data[$k]['createtime'] = date('m-d H:i',$v['createtime']); 
+        }
+        $this->success('获取成功',$data);
     }
 }

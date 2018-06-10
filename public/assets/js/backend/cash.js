@@ -26,14 +26,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'uid', title: __('Uid')},
-                        {field: 'num', title: __('Num')},
                         {field: 'alipay', title: __('Alipay')},
-                        {field: 'status', title: __('Status')},
-                        {field: 'createtime', title: __('Createtime'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
-                        {field: 'createdate', title: __('Createdate'), operate:'RANGE', addclass:'datetimerange'},
+                        {field: 'num', title: __('Num')},
+                        {field: 'status', title: __('Status'), visible:false, searchList: {"4":__('Status 4')}},
+                        {field: 'status_text', title: __('Status'), operate:false},
                         {field: 'updatetime', title: __('Updatetime'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
                         {field: 'updatedate', title: __('Updatedate'), operate:'RANGE', addclass:'datetimerange'},
-                        {field: 'remark', title: __('Remark')},
+                        {field: 'createtime', title: __('Createtime'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
+                        {field: 'createdate', title: __('Createdate'), operate:'RANGE', addclass:'datetimerange'},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]

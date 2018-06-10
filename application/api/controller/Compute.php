@@ -42,7 +42,7 @@ class Compute extends Api
             break;
             case 2: $msg    = '可转鱼数不足';
             break;
-            default: $msg    = '转账成功';
+            default: $msg    = $return;
             break;
         }
         $this->success($msg,[],$return);
